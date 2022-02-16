@@ -26,7 +26,7 @@ const errorHandler = (error, req, resp, next) => {
   if (error.name === 'CastError') {
     return resp.status(400).send({ error: 'Malformatted ID' })
   } else if (error.name === 'ValidationError') {
-    return resp.status.send({ error: error.message })
+    return resp.status(400).send({ error: error.message })
   }
 
   next(error)  
