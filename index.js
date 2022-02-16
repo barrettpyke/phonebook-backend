@@ -87,7 +87,7 @@ app.delete('/api/persons/:id', (req, resp, next) => {
 app.post('/api/persons', (req, resp, next) => {
   const body = req.body
 
-  if (body.name === undefined || body.number === undefined) {
+  if (body.name === "" || body.number === "") {
     resp.status(400).end()
   } else {
     const person = new Person({
