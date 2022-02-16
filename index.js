@@ -52,9 +52,8 @@ app.delete('/api/persons/:id', (req, resp) => {
 //ADD PERSON
 app.post('/api/persons', (req, resp) => {
   const body = req.body
-  console.log(body)
 
-  if (body.content === undefined) {
+  if (body.name === undefined || body.number === undefined) {
     return resp.status(400).json({ error: 'Content missing'})
   }
 
