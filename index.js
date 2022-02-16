@@ -89,17 +89,16 @@ app.post('/api/persons', (req, resp, next) => {
 
   if (body.name === undefined || body.number === undefined) {
     resp.status(400).end()
+  } else {
+    const person = new Person({
+      name: body.name,
+      number: body.number
+    })
+    person.save().then(savedPerson => {
+      resp.json(savedPerson)
+    })
+    .catch(error => next(error))
   }
-
-  const person = new Person({
-    name: body.name,
-    number: body.number
-  })
-
-  person.save().then(savedPerson => {
-    resp.json(savedPerson)
-  })
-  .catch(error => next(error))
 })
 
 //UPDATE PERSON
