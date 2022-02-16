@@ -1,12 +1,12 @@
-require('dotenv').config();
-const express = require('express');
-const morgan = require('morgan');
-const app = express();
-const cors = require('cors');
+require('dotenv').config()
+const express = require('express')
+const morgan = require('morgan')
+const app = express()
+const cors = require('cors')
 const Person = require('./models/person')
 
 app.use(express.json())
-morgan.token('body', function (req, res) { return JSON.stringify(req.body)})
+morgan.token('body', function (req) { return JSON.stringify(req.body)})
 app.use(morgan(function (tokens, req, res) {
   return [
     tokens.method(req, res),
@@ -17,8 +17,8 @@ app.use(morgan(function (tokens, req, res) {
     tokens.body(req, res)
   ].join(' ')
 }))
-app.use(cors());
-app.use(express.static('build'));
+app.use(cors())
+app.use(express.static('build'))
 
 const errorHandler = (error, req, resp, next) => {
   console.error(error.message)
@@ -29,7 +29,7 @@ const errorHandler = (error, req, resp, next) => {
     return resp.status(400).send({ error: error.message })
   }
 
-  next(error)  
+  next(error)
 }
 
 const unknownEndpoint = (req, resp) => {
@@ -37,51 +37,51 @@ const unknownEndpoint = (req, resp) => {
 }
 
 //GET DATA
-app.get('/info', (req, resp, error) => {
+app.get('/info', (req, resp) => {
   Person.find({})
-  .then(persons => {
-    if (persons) {
-    let timeStamp = Date()
-    resp.send(
-      `<p>Phonebook has info for ${persons.length} people.
+    .then(persons => {
+      if (persons) {
+        let timeStamp = Date()
+        resp.send(`<p>Phonebook has info for ${persons.length} people.
        <p>${timeStamp}</p>`
-    )
-  } else {
-    resp.status(404).end()
-  }
-  })
-  .catch(error => next(error))
+        )
+      } else {
+        resp.status(404).end()
+      }
+    })
+    // eslint-disable-next-line no-undef
+    .catch(error => next(error))
 })
 
 
 app.get('/api/persons', (req, resp, next) => {
   Person.find({})
-  .then(persons => {
-    if (persons) {
-      resp.json(persons)
-    } else {
-      resp.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+    .then(persons => {
+      if (persons) {
+        resp.json(persons)
+      } else {
+        resp.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (req, resp, next) => {
   Person.findById(req.params.id)
-  .then(person => {
-    if (person) {
-      resp.json(person)
-    } else {
-      resp.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+    .then(person => {
+      if (person) {
+        resp.json(person)
+      } else {
+        resp.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 //DELETE PERSON
 app.delete('/api/persons/:id', (req, resp, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(result => {
+    .then(() => {
       resp.status(204).end()
     })
     .catch(error => next(error))
@@ -91,7 +91,7 @@ app.delete('/api/persons/:id', (req, resp, next) => {
 app.post('/api/persons', (req, resp, next) => {
   const body = req.body
 
-  if (body.name === "" || body.number === "") {
+  if (body.name === '' || body.number === '') {
     resp.status(400).end()
   } else {
     const person = new Person({
@@ -101,7 +101,7 @@ app.post('/api/persons', (req, resp, next) => {
     person.save().then(savedPerson => {
       resp.json(savedPerson)
     })
-    .catch(error => next(error))
+      .catch(error => next(error))
   }
 })
 
@@ -115,18 +115,19 @@ app.put('/api/persons/:id', (req, resp, next) => {
   }
 
   Person.findByIdAndUpdate(
-    req.params.id, person, 
-    { new: true, runValidators: true, context: 'query'})
-  .then(updatedNote => {
-    resp.json(updatedNote)
-  })
-  .catch(error => next(error))
+    req.params.id, person,
+    { new: true, runValidators: true, context: 'query' })
+    .then(updatedNote => {
+      resp.json(updatedNote)
+    })
+    .catch(error => next(error))
 })
 
 app.use(unknownEndpoint)
-app.use(errorHandler);
+app.use(errorHandler)
 
-const PORT = process.env.PORT;
+// eslint-disable-next-line no-undef
+const PORT = process.env.PORT
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`)
 })
