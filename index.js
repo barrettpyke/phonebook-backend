@@ -61,7 +61,7 @@ app.get('/api/persons', (req, resp, next) => {
       resp.status(404).end()
     }
   })
-  .catch(error => next(error))
+  //.catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (req, resp, next) => {
