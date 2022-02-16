@@ -23,10 +23,9 @@ mongoose.connect(url)
       validate: {
         validator: function(value) {
           return /\d{2,3}-\d+/.test(value);
-        },
-        message: props => `${props.value} is not a valid number`
         }
       }
+    }
   })
 
   personSchema.set('toJSON', {
