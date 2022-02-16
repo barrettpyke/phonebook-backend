@@ -34,8 +34,6 @@ const unknownEndpoint = (req, resp) => {
   resp.status(404).send({ error: 'Unknown Endpoint' })
 }
 
-app.use(unknownEndpoint)
-
 //GET DATA
 app.get('/info', (req, resp, error) => {
   Person.find({})
@@ -120,6 +118,7 @@ app.put('/api/persons/:id', (req, resp, next) => {
   .catch(error => next(error))
 })
 
+app.use(unknownEndpoint)
 app.use(errorHandler);
 
 const PORT = process.env.PORT;
