@@ -40,8 +40,10 @@ app.get('/info', (req, resp, error) => {
   .then(persons => {
     if (persons) {
     let timeStamp = Date()
-    `<p>Phonebook has info for ${persons.length} people.
-     <p>${timeStamp}</p>`
+    resp.send(
+      `<p>Phonebook has info for ${persons.length} people.
+       <p>${timeStamp}</p>`
+    )
   } else {
     resp.status(404).end()
   }
